@@ -17,7 +17,7 @@ const jobSchema = new Schema({
   image: { type: String },
   userCount: { type: Number, default: 0 },
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' }
+  companyId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Company' }
 });
 
 const companySchema = new Schema({

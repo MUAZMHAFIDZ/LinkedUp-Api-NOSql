@@ -6,7 +6,6 @@ const userRoutes = require('./routes/userRoutes');
 const companyRoutes = require('./routes/companyRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const path = require('path');
-// const serverless = require('serverless-http');
 const verifyApiKey = require('./middleware/verifyApiKey');
 require('dotenv').config();
 
@@ -28,5 +27,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-
-// module.exports.handler = serverless(app);

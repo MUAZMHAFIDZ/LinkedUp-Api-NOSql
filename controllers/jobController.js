@@ -144,7 +144,8 @@ exports.searchJob = async (req, res) => {
 };
 
 exports.registerForJob = async (req, res) => {
-    const { userId, jobId, description, portfolioLink } = req.body;
+    const userId = req.params;
+    const { jobId, description, portfolioLink } = req.body;
     try {
         const existingEntry = await JobUsers.findOne({
             jobId,
@@ -193,7 +194,7 @@ exports.acceptApplicant = async (req, res) => {
     try {
         const user = await User.findById(userId);
 
-        if (!user || user.role !== 'company') {
+        if (!user || user.role !== 'admin') {
             return res.status(403).json({ error: 'Unauthorized access' });
         }
 
@@ -212,3 +213,25 @@ exports.acceptApplicant = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.getLatestJobUsers = async (req, res) => {
+    try {
+      const jobUsers = await JobUsers.find()
+        .sort({ createdAt: -1 }) 
+        .populate({
+          path: 'jobId',
+          match: { status: true }
+        })      
+        .populate('userId');   
+
+      const filteredJobUsers = jobUsers.filter(jobUser => jobUser.jobId !== null);
+
+      res.status(200).json(filteredJobUsers);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Terjadi kesalahan saat mengambil data job users.',
+      });
+    }
+  };
